@@ -70,7 +70,7 @@ async function updateUser(req, res) {
     const userId = req.user._id;
     const { name, about } = req.body;
 
-    if (name.length < 2) {
+    if (name && name.length < 2) {
       res.status(400).send({
         message: 'Некорректное имя пользователя',
       });
