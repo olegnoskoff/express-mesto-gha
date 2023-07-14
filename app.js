@@ -20,7 +20,7 @@ app.use(express.json());
 
 // Middleware для обработки ошибок
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   console.error(err); // Вывод ошибки в консоль (можно заменить на логирование)
 
   let statusCode = 500;
