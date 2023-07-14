@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const http = require('http');
 const { User } = require('../models/user');
@@ -21,25 +22,20 @@ async function getAllUsers(req, res) {
 async function getUser(req, res) {
   try {
     const { userId } = req.params;
+
     const user = await User.findById(userId);
-
     if (!user) {
-      const error = new Error('Пользователь не найден');
-      error.name = 'NotFoundError';
-      throw error;
+      res.status(404).send({
+        message: 'Пользователь не найден',
+      });
+      return;
     }
 
-    res.send(user);
+    res.status(200).send(user);
   } catch (err) {
-    if (err.name === 'NotFoundError') {
-      res.status(STATUS_NOT_FOUND).send({
-        message: err.message,
-      });
-    } else {
-      res.status(500).send({
-        message: http.STATUS_CODES[500],
-      });
-    }
+    res.status(500).send({
+      message: http.STATUS_CODES[500],
+    });
   }
 }
 
