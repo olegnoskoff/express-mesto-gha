@@ -65,8 +65,6 @@ async function createUser(req, res) {
   }
 }
 
-// В файле userController.js
-
 async function updateUser(req, res) {
   try {
     const userId = req.user._id;
@@ -82,7 +80,7 @@ async function updateUser(req, res) {
     const user = await User.findByIdAndUpdate(
       userId,
       { name, about },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
     res.send(user);
   } catch (err) {
