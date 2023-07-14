@@ -3,6 +3,7 @@ const http = require('http');
 const { Card } = require('../models/card');
 
 const STATUS_OK = http.STATUS_CODES[200];
+const STATUS_CREATED = http.STATUS_CODES[201];
 const STATUS_BAD_REQUEST = http.STATUS_CODES[400];
 const STATUS_NOT_FOUND = http.STATUS_CODES[404];
 
@@ -22,10 +23,10 @@ async function createCard(req, res) {
     const { name, link } = req.body;
     const ownerId = req.user._id;
     const card = await Card.create({ name, link, owner: ownerId });
-    res.send(card);
+    res.status(STATUS_CREATED).send(card);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      res.status(400).send({
+      res.status(STATUS_BAD_REQUEST).send({
         message: err.message,
       });
     } else {
@@ -51,7 +52,7 @@ async function deleteCard(req, res) {
     res.send(card);
   } catch (err) {
     if (err.name === 'NotFoundError') {
-      res.status(404).send({
+      res.status(STATUS_NOT_FOUND).send({
         message: err.message,
       });
     } else {
@@ -80,7 +81,7 @@ async function putLike(req, res) {
     res.send(card);
   } catch (err) {
     if (err.name === 'NotFoundError') {
-      res.status(404).send({
+      res.status(STATUS_NOT_FOUND).send({
         message: err.message,
       });
     } else {
@@ -109,7 +110,7 @@ async function deleteLike(req, res) {
     res.send(card);
   } catch (err) {
     if (err.name === 'NotFoundError') {
-      res.status(404).send({
+      res.status(STATUS_NOT_FOUND).send({
         message: err.message,
       });
     } else {

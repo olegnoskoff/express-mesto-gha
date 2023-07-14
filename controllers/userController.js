@@ -3,6 +3,7 @@ const http = require('http');
 const { User } = require('../models/user');
 
 const STATUS_OK = http.STATUS_CODES[200];
+const STATUS_CREATED = http.STATUS_CODES[201];
 const STATUS_BAD_REQUEST = http.STATUS_CODES[400];
 const STATUS_NOT_FOUND = http.STATUS_CODES[404];
 
@@ -31,7 +32,7 @@ async function getUser(req, res) {
     res.send(user);
   } catch (err) {
     if (err.name === 'NotFoundError') {
-      res.status(404).send({
+      res.status(STATUS_NOT_FOUND).send({
         message: err.message,
       });
     } else {
@@ -46,10 +47,10 @@ async function createUser(req, res) {
   try {
     const { name, about, avatar } = req.body;
     const users = await User.create({ name, about, avatar });
-    res.send(users);
+    res.status(STATUS_CREATED).send(users);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      res.status(400).send({
+      res.status(STATUS_BAD_REQUEST).send({
         message: err.message,
       });
     } else {
@@ -72,11 +73,11 @@ async function updateUser(req, res) {
     res.send(user);
   } catch (err) {
     if (err.name === 'NotFoundError') {
-      res.status(404).send({
+      res.status(STATUS_NOT_FOUND).send({
         message: err.message,
       });
     } else if (err.name === 'ValidationError') {
-      res.status(400).send({
+      res.status(STATUS_BAD_REQUEST).send({
         message: err.message,
       });
     } else {
@@ -99,11 +100,11 @@ async function updateAvatar(req, res) {
     res.send(user);
   } catch (err) {
     if (err.name === 'NotFoundError') {
-      res.status(404).send({
+      res.status(STATUS_NOT_FOUND).send({
         message: err.message,
       });
     } else if (err.name === 'ValidationError') {
-      res.status(400).send({
+      res.status(STATUS_BAD_REQUEST).send({
         message: err.message,
       });
     } else {
