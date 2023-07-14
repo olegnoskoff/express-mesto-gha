@@ -35,9 +35,9 @@ app.use((err, req, res, next) => {
 });
 
 // Middleware для временной авторизации
-app.use((req, res, next) => {
+app.use((req, res) => {
   req.user = {
-    _id: '5d8b8592978f8bd833ca8133', // Замените этот _id на нужное значение
+    _id: '64b15f966f80a70b843f4234'
   };
 
   next();
