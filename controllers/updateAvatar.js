@@ -1,7 +1,7 @@
 const { User } = require('../models/user');
 const { handleError } = require('../utils/handleError');
 
-async function upAvatar(req, res) {
+async function updateAvatar(req, res) {
   try {
     const userId = req.user._id;
     const { avatar } = req.body;
@@ -16,4 +16,4 @@ async function upAvatar(req, res) {
   }
 }
 
-module.exports = { updateAvatar: upAvatar };
+module.exports = { updateAvatar };

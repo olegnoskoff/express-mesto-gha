@@ -1,7 +1,7 @@
 const { Card } = require('../models/card');
 const { handleError } = require('../utils/handleError');
 
-async function cards(req, res) {
+async function createCard(req, res) {
   try {
     const { name, link } = req.body;
     const ownerId = req.user._id;
@@ -12,4 +12,4 @@ async function cards(req, res) {
   }
 }
 
-module.exports = { createCard: cards };
+module.exports = { createCard };
