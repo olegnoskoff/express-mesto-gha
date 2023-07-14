@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 
 const User = require('../models/user');
@@ -10,7 +11,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:userId', (req, res, next) => {
-  const userId = req.params.userId;
+  const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
       if (!user) {
@@ -35,7 +36,7 @@ router.patch('/me', (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
     .then((user) => {
       if (!user) {
@@ -53,7 +54,7 @@ router.patch('/me/avatar', (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
     .then((user) => {
       if (!user) {

@@ -2,14 +2,14 @@ const User = require('../models/user');
 
 module.exports.getUsers = (req, res, next) => {
   User.find()
-    .then(users => res.json(users))
+    .then((users) => res.json(users))
     .catch(next);
 };
 
 module.exports.getUserById = (req, res, next) => {
-  const userId = req.params.userId;
+  const { userId } = req.params;
   User.findById(userId)
-    .then(user => {
+    .then((user) => {
       if (!user) {
         const error = new Error('User not found');
         error.name = 'NotFoundError';
@@ -23,7 +23,7 @@ module.exports.getUserById = (req, res, next) => {
 module.exports.createUser = (req, res, next) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then(user => res.status(201).json(user))
+    .then((user) => res.status(201).json(user))
     .catch(next);
 };
 
@@ -32,9 +32,9 @@ module.exports.updateUserProfile = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
-    .then(user => {
+    .then((user) => {
       if (!user) {
         const error = new Error('User not found');
         error.name = 'NotFoundError';
@@ -50,9 +50,9 @@ module.exports.updateUserAvatar = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
-    .then(user => {
+    .then((user) => {
       if (!user) {
         const error = new Error('User not found');
         error.name = 'NotFoundError';

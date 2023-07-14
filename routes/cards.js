@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 
 const Card = require('../models/card');
@@ -17,7 +18,7 @@ router.post('/', (req, res, next) => {
 });
 
 router.delete('/:cardId', (req, res, next) => {
-  const cardId = req.params.cardId;
+  const { cardId } = req.params;
   Card.findByIdAndDelete(cardId)
     .then((card) => {
       if (!card) {
@@ -31,11 +32,11 @@ router.delete('/:cardId', (req, res, next) => {
 });
 
 router.put('/:cardId/likes', (req, res, next) => {
-  const cardId = req.params.cardId;
+  const { cardId } = req.params;
   Card.findByIdAndUpdate(
     cardId,
     { $addToSet: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       if (!card) {
@@ -49,11 +50,11 @@ router.put('/:cardId/likes', (req, res, next) => {
 });
 
 router.delete('/:cardId/likes', (req, res, next) => {
-  const cardId = req.params.cardId;
+  const { cardId } = req.params;
   Card.findByIdAndUpdate(
     cardId,
     { $pull: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       if (!card) {
