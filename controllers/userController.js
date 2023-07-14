@@ -46,11 +46,19 @@ async function getUser(req, res) {
 async function createUser(req, res) {
   try {
     const { name, about, avatar } = req.body;
+
+    if (name.length < 2) {
+      res.status(400).send({
+        message: 'Некорректное имя пользователя',
+      });
+      return;
+    }
+
     const users = await User.create({ name, about, avatar });
-    res.status(STATUS_CREATED).send(users);
+    res.status(201).send(users);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      res.status(STATUS_BAD_REQUEST).send({
+      res.status(400).send({
         message: err.message,
       });
     } else {
