@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const express = require('express');
 const mongoose = require('mongoose');
 const { routes } = require('./routes');
@@ -17,10 +18,9 @@ mongoose
     console.error(err);
   });
 
-// Middleware для временной авторизации
 app.use((req, res, next) => {
   req.user = {
-    _id: '5d8b8592978f8bd833ca8133', // Замените этот _id на нужное значение
+    _id: '64b15f966f80a70b843f4234',
   };
 
   next();
