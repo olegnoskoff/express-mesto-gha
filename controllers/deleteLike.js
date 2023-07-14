@@ -12,7 +12,7 @@ async function deleteLike(req, res) {
 
     if (!card) {
       const error = new Error('Карточка не найдена');
-      error.name = 'NotFoundErr';
+      error.name = 'NotFoundError';
       throw error;
     }
 

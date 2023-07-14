@@ -8,7 +8,7 @@ async function getUser(req, res) {
 
     if (!user) {
       const error = new Error('Пользователь не найден');
-      error.name = 'NotFoundErr';
+      error.name = 'NotFoundError';
       throw error;
     }
 
