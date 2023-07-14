@@ -65,14 +65,24 @@ async function createUser(req, res) {
   }
 }
 
+// В файле userController.js
+
 async function updateUser(req, res) {
   try {
     const userId = req.user._id;
     const { name, about } = req.body;
+
+    if (name.length < 2) {
+      res.status(400).send({
+        message: 'Некорректное имя пользователя',
+      });
+      return;
+    }
+
     const user = await User.findByIdAndUpdate(
       userId,
       { name, about },
-      { new: true, runValidators: true },
+      { new: true, runValidators: true }
     );
     res.send(user);
   } catch (err) {
