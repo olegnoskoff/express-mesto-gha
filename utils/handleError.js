@@ -1,7 +1,16 @@
+/* eslint-disable no-unused-vars */
+const http = require('http');
+
+// Вместо текстовых сообщений используем константы из пакета http
+const STATUS_OK = http.STATUS_CODES[200];
+const STATUS_BAD_REQUEST = http.STATUS_CODES[400];
+const STATUS_NOT_FOUND = http.STATUS_CODES[404];
+const STATUS_INTERNAL_SERVER_ERROR = http.STATUS_CODES[500];
+
 function handleError(err, req, res) {
   if (err.name === 'CastError') {
     res.status(400).send({
-      message: 'Неверный формат переданных данных',
+      message: STATUS_BAD_REQUEST,
     });
     return;
   }
@@ -21,7 +30,7 @@ function handleError(err, req, res) {
   }
 
   res.status(500).send({
-    message: 'Не получилось обработать запрос',
+    message: STATUS_INTERNAL_SERVER_ERROR,
   });
 }
 

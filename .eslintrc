@@ -1,6 +1,5 @@
 {
   "env": {
-    "browser": true,
     "commonjs": true,
     "es2021": true
   },
@@ -11,6 +10,5 @@
   "rules": {
     "quotes": ["error", "single"],
     "no-underscore-dangle": ["error", { "allow": ["_id"] }],
-    "no-console": ["error", { "allow": ["warn", "error"] }]
   }
 }
