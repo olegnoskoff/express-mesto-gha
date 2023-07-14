@@ -1,7 +1,7 @@
 const { User } = require('../models/user');
 const { handleError } = require('../utils/handleError');
 
-async function user(req, res) {
+async function createUser(req, res) {
   try {
     const { name, about, avatar } = req.body;
     const users = await User.create({ name, about, avatar });
@@ -11,4 +11,4 @@ async function user(req, res) {
   }
 }
 
-module.exports = { createUser: user };
+module.exports = { createUser };
