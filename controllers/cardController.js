@@ -22,6 +22,14 @@ async function createCard(req, res) {
   try {
     const { name, link } = req.body;
     const ownerId = req.user._id;
+
+    if (name.length < 2 || name.length > 30) {
+      res.status(400).send({
+        message: 'Поле "name" должно содержать от 2 до 30 символов.',
+      });
+      return;
+    }
+
     const card = await Card.create({ name, link, owner: ownerId });
     res.status(STATUS_CREATED).send(card);
   } catch (err) {

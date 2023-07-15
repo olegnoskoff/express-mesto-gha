@@ -70,9 +70,17 @@ async function updateUser(req, res) {
     const userId = req.user._id;
     const { name, about } = req.body;
 
-    if (name && name.length < 2) {
+    // Проверка на длину имени и описания
+    if (name && (name.length < 2 || name.length > 30)) {
       res.status(400).send({
-        message: 'Некорректное имя пользователя',
+        message: 'Поле "name" должно содержать от 2 до 30 символов.',
+      });
+      return;
+    }
+
+    if (about && (about.length < 2 || about.length > 30)) {
+      res.status(400).send({
+        message: 'Поле "about" должно содержать от 2 до 30 символов.',
       });
       return;
     }
