@@ -7,6 +7,8 @@ const routes = express.Router();
 
 routes.use('/users', users);
 routes.use('/cards', cards);
+
+// Обработчик для несуществующих маршрутов
 routes.all('*', (req, res) => {
   const err = new Error('Неверный адрес запроса');
   err.name = 'NotFoundError';

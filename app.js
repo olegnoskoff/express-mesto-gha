@@ -1,8 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 const express = require('express');
 const mongoose = require('mongoose');
-const http = require('http');
 const { routes } = require('./routes');
 const { handleError } = require('./utils/handleError');
 
@@ -12,8 +9,7 @@ const DATABASE_URL = 'mongodb://127.0.0.1:27017/mestodb';
 const app = express();
 
 // Подключение к базе данных
-mongoose
-  .connect(DATABASE_URL)
+mongoose.connect(DATABASE_URL)
   .then(() => {
     console.log(`Connected to database on ${DATABASE_URL}`);
 
@@ -27,11 +23,12 @@ mongoose
     console.error(err);
   });
 
+app.use(express.json());
+
 app.use((req, res, next) => {
   req.user = {
     _id: '64b15f966f80a70b843f4234',
   };
-
   next();
 });
 
@@ -43,3 +40,5 @@ app.all('*', (req, res) => {
   err.name = 'NotFoundError';
   handleError(err, req, res);
 });
+
+module.exports = app;
