@@ -1,19 +1,21 @@
 /* eslint-disable no-unused-vars */
 const http = require('http');
+const mongoose = require('mongoose');
 const { Card } = require('../models/card');
 
 const STATUS_OK = http.STATUS_CODES[200];
 const STATUS_CREATED = http.STATUS_CODES[201];
 const STATUS_BAD_REQUEST = http.STATUS_CODES[400];
 const STATUS_NOT_FOUND = http.STATUS_CODES[404];
+const STATUS_INTERNAL_SERVER_ERROR = http.STATUS_CODES[500];
 
 async function getAllCards(req, res) {
   try {
     const cards = await Card.find({});
     res.send(cards);
   } catch (err) {
-    res.status(500).send({
-      message: http.STATUS_CODES[500],
+    res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+      message: STATUS_INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -22,24 +24,6 @@ async function createCard(req, res) {
   try {
     const { name, link } = req.body;
     const ownerId = req.user._id;
-
-    if (!name) {
-      res.status(400).send({ message: 'Поле \'name\' является обязательным' });
-      return;
-    }
-
-    if (!link) {
-      res.status(400).send({ message: 'Поле \'link\' является обязательным' });
-      return;
-    }
-
-    if (name.length < 2 || name.length > 30) {
-      res.status(400).send({
-        message: 'Поле \'name\' должно содержать от 2 до 30 символов',
-      });
-      return;
-    }
-
     const card = await Card.create({ name, link, owner: ownerId });
     res.status(STATUS_CREATED).send(card);
   } catch (err) {
@@ -48,8 +32,8 @@ async function createCard(req, res) {
         message: err.message,
       });
     } else {
-      res.status(500).send({
-        message: http.STATUS_CODES[500],
+      res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+        message: STATUS_INTERNAL_SERVER_ERROR,
       });
     }
   }
@@ -74,8 +58,8 @@ async function deleteCard(req, res) {
         message: err.message,
       });
     } else {
-      res.status(500).send({
-        message: http.STATUS_CODES[500],
+      res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+        message: STATUS_INTERNAL_SERVER_ERROR,
       });
     }
   }
@@ -103,8 +87,8 @@ async function putLike(req, res) {
         message: err.message,
       });
     } else {
-      res.status(500).send({
-        message: http.STATUS_CODES[500],
+      res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+        message: STATUS_INTERNAL_SERVER_ERROR,
       });
     }
   }
@@ -132,8 +116,8 @@ async function deleteLike(req, res) {
         message: err.message,
       });
     } else {
-      res.status(500).send({
-        message: http.STATUS_CODES[500],
+      res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+        message: STATUS_INTERNAL_SERVER_ERROR,
       });
     }
   }

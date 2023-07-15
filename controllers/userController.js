@@ -1,12 +1,13 @@
-/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const http = require('http');
+const mongoose = require('mongoose');
 const { User } = require('../models/user');
 
 const STATUS_OK = http.STATUS_CODES[200];
 const STATUS_CREATED = http.STATUS_CODES[201];
 const STATUS_BAD_REQUEST = http.STATUS_CODES[400];
 const STATUS_NOT_FOUND = http.STATUS_CODES[404];
+const STATUS_INTERNAL_SERVER_ERROR = http.STATUS_CODES[500];
 
 async function getAllUsers(req, res) {
   try {
@@ -14,7 +15,7 @@ async function getAllUsers(req, res) {
     res.send(users);
   } catch (err) {
     res.status(500).send({
-      message: http.STATUS_CODES[500],
+      message: STATUS_INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -22,6 +23,13 @@ async function getAllUsers(req, res) {
 async function getUser(req, res) {
   try {
     const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      res.status(400).send({
+        message: 'Некорректный id пользователя',
+      });
+      return;
+    }
 
     const user = await User.findById(userId);
     if (!user) {
@@ -34,7 +42,7 @@ async function getUser(req, res) {
     res.status(200).send(user);
   } catch (err) {
     res.status(500).send({
-      message: http.STATUS_CODES[500],
+      message: STATUS_INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -43,6 +51,13 @@ async function createUser(req, res) {
   try {
     const { name, about, avatar } = req.body;
 
+    if (!name) {
+      res.status(400).send({
+        message: 'Поле \'name\' является обязательным',
+      });
+      return;
+    }
+
     if (name.length < 2) {
       res.status(400).send({
         message: 'Некорректное имя пользователя',
@@ -50,16 +65,16 @@ async function createUser(req, res) {
       return;
     }
 
-    const users = await User.create({ name, about, avatar });
-    res.status(201).send(users);
+    const user = await User.create({ name, about, avatar });
+    res.status(STATUS_CREATED).send(user);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      res.status(400).send({
+      res.status(STATUS_BAD_REQUEST).send({
         message: err.message,
       });
     } else {
-      res.status(500).send({
-        message: http.STATUS_CODES[500],
+      res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+        message: STATUS_INTERNAL_SERVER_ERROR,
       });
     }
   }
@@ -70,17 +85,9 @@ async function updateUser(req, res) {
     const userId = req.user._id;
     const { name, about } = req.body;
 
-    // Проверка на длину имени и описания
-    if (name && (name.length < 2 || name.length > 30)) {
+    if (name && name.length < 2) {
       res.status(400).send({
-        message: 'Поле "name" должно содержать от 2 до 30 символов.',
-      });
-      return;
-    }
-
-    if (about && (about.length < 2 || about.length > 30)) {
-      res.status(400).send({
-        message: 'Поле "about" должно содержать от 2 до 30 символов.',
+        message: 'Некорректное имя пользователя',
       });
       return;
     }
@@ -101,8 +108,8 @@ async function updateUser(req, res) {
         message: err.message,
       });
     } else {
-      res.status(500).send({
-        message: http.STATUS_CODES[500],
+      res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+        message: STATUS_INTERNAL_SERVER_ERROR,
       });
     }
   }
@@ -128,8 +135,8 @@ async function updateAvatar(req, res) {
         message: err.message,
       });
     } else {
-      res.status(500).send({
-        message: http.STATUS_CODES[500],
+      res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+        message: STATUS_INTERNAL_SERVER_ERROR,
       });
     }
   }
