@@ -23,9 +23,19 @@ async function createCard(req, res) {
     const { name, link } = req.body;
     const ownerId = req.user._id;
 
+    if (!name) {
+      res.status(400).send({ message: 'Поле \'name\' является обязательным' });
+      return;
+    }
+
+    if (!link) {
+      res.status(400).send({ message: 'Поле \'link\' является обязательным' });
+      return;
+    }
+
     if (name.length < 2 || name.length > 30) {
       res.status(400).send({
-        message: 'Поле "name" должно содержать от 2 до 30 символов.',
+        message: 'Поле \'name\' должно содержать от 2 до 30 символов',
       });
       return;
     }
