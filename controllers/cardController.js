@@ -3,7 +3,6 @@ const http = require('http');
 const mongoose = require('mongoose');
 const { Card } = require('../models/card');
 
-const STATUS_OK = http.STATUS_CODES[200];
 const STATUS_CREATED = http.STATUS_CODES[201];
 const STATUS_BAD_REQUEST = http.STATUS_CODES[400];
 const STATUS_NOT_FOUND = http.STATUS_CODES[404];

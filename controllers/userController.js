@@ -1,6 +1,7 @@
 const http = require('http');
 const { User } = require('../models/user');
 
+const STATUS_OK = http.STATUS_CODES[200];
 const STATUS_CREATED = http.STATUS_CODES[201];
 const STATUS_BAD_REQUEST = http.STATUS_CODES[400];
 const STATUS_NOT_FOUND = http.STATUS_CODES[404];
@@ -11,8 +12,8 @@ async function getAllUsers(req, res) {
     const users = await User.find({});
     res.send(users);
   } catch (err) {
-    res.status(500).send({
-      message: http.STATUS_CODES[500],
+    res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+      message: STATUS_INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -23,15 +24,15 @@ async function getUser(req, res) {
     const user = await User.findById(userId);
 
     if (!user) {
-      res.status(404).send({
+      res.status(STATUS_NOT_FOUND).send({
         message: 'Пользователь не найден',
       });
     } else {
-      res.status(200).send(user);
+      res.status(STATUS_OK).send(user);
     }
   } catch (err) {
-    res.status(500).send({
-      message: http.STATUS_CODES[500],
+    res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+      message: STATUS_INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -41,7 +42,7 @@ async function createUser(req, res) {
     const { name, about, avatar } = req.body;
 
     if (name.length < 2) {
-      res.status(400).send({
+      res.status(STATUS_BAD_REQUEST).send({
         message: 'Некорректное имя пользователя',
       });
       return;
@@ -56,7 +57,7 @@ async function createUser(req, res) {
       });
     } else {
       res.status(STATUS_INTERNAL_SERVER_ERROR).send({
-        message: http.STATUS_CODES[500],
+        message: STATUS_INTERNAL_SERVER_ERROR,
       });
     }
   }
@@ -68,7 +69,7 @@ async function updateUser(req, res) {
     const { name, about } = req.body;
 
     if (name && name.length < 2) {
-      res.status(400).send({
+      res.status(STATUS_BAD_REQUEST).send({
         message: 'Некорректное имя пользователя',
       });
       return;
@@ -91,7 +92,7 @@ async function updateUser(req, res) {
       });
     } else {
       res.status(STATUS_INTERNAL_SERVER_ERROR).send({
-        message: http.STATUS_CODES[500],
+        message: STATUS_INTERNAL_SERVER_ERROR,
       });
     }
   }
@@ -119,7 +120,7 @@ async function updateAvatar(req, res) {
       });
     } else {
       res.status(STATUS_INTERNAL_SERVER_ERROR).send({
-        message: http.STATUS_CODES[500],
+        message: STATUS_INTERNAL_SERVER_ERROR,
       });
     }
   }
