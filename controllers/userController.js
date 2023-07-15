@@ -2,7 +2,7 @@ const http = require('http');
 const { User } = require('../models/user');
 
 const STATUS_OK = http.STATUS_CODES[200];
-const STATUS_CREATED = http.STATUS_CODES[201];
+// const STATUS_CREATED = http.STATUS_CODES[201];
 const STATUS_BAD_REQUEST = http.STATUS_CODES[400];
 const STATUS_NOT_FOUND = http.STATUS_CODES[404];
 const STATUS_INTERNAL_SERVER_ERROR = http.STATUS_CODES[500];
