@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 const http = require('http');
 
-// Вместо текстовых сообщений используем константы из пакета http
 const STATUS_OK = http.STATUS_CODES[200];
 const STATUS_BAD_REQUEST = http.STATUS_CODES[400];
 const STATUS_NOT_FOUND = http.STATUS_CODES[404];
