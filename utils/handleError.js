@@ -1,36 +1,33 @@
-/* eslint-disable no-unused-vars */
 const http = require('http');
 
-// Вместо текстовых сообщений используем константы из пакета http
-const STATUS_OK = http.STATUS_CODES[200];
-const STATUS_BAD_REQUEST = http.STATUS_CODES[400];
-const STATUS_NOT_FOUND = http.STATUS_CODES[404];
-const STATUS_INTERNAL_SERVER_ERROR = http.STATUS_CODES[500];
+const STATUS_BAD_REQUEST = 400;
+const STATUS_NOT_FOUND = 404;
+const STATUS_INTERNAL_SERVER_ERROR = 500;
 
 function handleError(err, req, res) {
   if (err.name === 'CastError') {
-    res.status(400).send({
-      message: STATUS_BAD_REQUEST,
+    res.status(STATUS_BAD_REQUEST).send({
+      message: http.STATUS_CODES[STATUS_BAD_REQUEST],
     });
     return;
   }
 
   if (err.name === 'ValidationError') {
-    res.status(400).send({
+    res.status(STATUS_BAD_REQUEST).send({
       message: err.message,
     });
     return;
   }
 
   if (err.name === 'NotFoundError') {
-    res.status(404).send({
+    res.status(STATUS_NOT_FOUND).send({
       message: err.message,
     });
     return;
   }
 
-  res.status(500).send({
-    message: STATUS_INTERNAL_SERVER_ERROR,
+  res.status(STATUS_INTERNAL_SERVER_ERROR).send({
+    message: http.STATUS_CODES[STATUS_INTERNAL_SERVER_ERROR],
   });
 }
 

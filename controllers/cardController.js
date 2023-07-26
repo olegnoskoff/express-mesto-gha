@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
 const http = require('http');
-const mongoose = require('mongoose');
 const { Card } = require('../models/card');
 
 const STATUS_CREATED = http.STATUS_CODES[201];
