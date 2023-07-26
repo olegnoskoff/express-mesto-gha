@@ -1,16 +1,52 @@
 const express = require('express');
+const { celebrate, Joi } = require('celebrate');
+
+const { validateObjectId } = require('../utils/validateObjectId');
+
 const {
-  getAllUsers, getUser, createUser, updateUser, updateAvatar, login,
+  getAllUsers,
+  getUser,
+  updateUser,
+  updateAvatar,
+  getCurrentUser,
 } = require('../controllers/userController');
-const { auth } = require('../middlewares/auth');
 
 const users = express.Router();
 
 users.get('/', getAllUsers);
-users.get('/:userId', getUser);
-users.post('/signup', createUser);
-users.post('/signin', login);
-users.patch('/me', auth, updateUser);
-users.patch('/me/avatar', auth, updateAvatar);
+users.get('/me', getCurrentUser);
+
+users.get(
+  '/:userId',
+  celebrate({
+    params: Joi.object().keys({
+      userId: Joi.string().custom(validateObjectId),
+    }),
+  }),
+  getUser,
+);
+
+users.patch(
+  '/me',
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().min(2).max(30),
+      about: Joi.string().min(2).max(30),
+    }),
+  }),
+  updateUser,
+);
+
+users.patch(
+  '/me/avatar',
+  celebrate({
+    body: Joi.object().keys({
+      avatar: Joi.string().regex(
+        /https?:\/\/(www)?[0-9a-z\-._~:/?#[\]@!$&'()*+,;=]+#?$/i,
+      ),
+    }),
+  }),
+  updateAvatar,
+);
 
 module.exports = { users };

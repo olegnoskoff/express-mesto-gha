@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
 const express = require('express');
 const mongoose = require('mongoose');
-const { handleError } = require('./utils/handleError');
+const { errors } = require('celebrate');
+
 const { routes } = require('./routes');
+const { handleError } = require('./middlewares/handleError');
 
 const { PORT = 3000 } = process.env;
 const DATABASE_URL = 'mongodb://127.0.0.1:27017/mestodb';
@@ -13,24 +15,18 @@ mongoose
   .connect(DATABASE_URL)
   .then(() => {
     console.log(`Connected to database on ${DATABASE_URL}`);
-
-    app.listen(PORT, () => {
-      console.log(`App started on port ${PORT}`);
-    });
   })
   .catch((err) => {
     console.log('Error on database connection');
     console.error(err);
   });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(routes);
 
-app.use('/api', routes);
+app.use(errors()); // обработчик ошибок celebrate
 
-// Обработчик для несуществующих маршрутов
-app.all('*', (req, res) => {
-  const err = new Error('Неверный адрес запроса');
-  err.name = 'NotFoundError';
-  handleError(err, req, res);
+app.use(handleError);
+
+app.listen(PORT, () => {
+  console.log(`App started on port ${PORT}`);
 });
