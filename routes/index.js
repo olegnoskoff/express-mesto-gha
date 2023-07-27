@@ -1,7 +1,6 @@
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
 
-const { users } = require('./users');
 const { cards } = require('./cards');
 const { login, createUser } = require('../controllers/userController');
 const { auth } = require('../middlewares/auth');
@@ -36,7 +35,7 @@ routes.post(
   login,
 );
 
-routes.use('/users', auth, users);
+routes.use(auth);
 routes.use('/cards', auth, cards);
 
 routes.all('*', (req, res, next) => {

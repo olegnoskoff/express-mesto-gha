@@ -28,7 +28,7 @@ cards.post(
       name: Joi.string().required().min(2).max(30),
       link: Joi.string()
         .required()
-        .regex(/https?:\/\/(www)?[0-9a-z\-._~:/?#[\]@!$&'()*+,;=]+#?$/i),
+        .regex(/https?:\/\/(www\.)?[0-9a-z\-._~:/?#[\]@!$&'()*+,;=]+/i),
     }),
   }),
   createCard,
